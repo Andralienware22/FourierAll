@@ -26,7 +26,7 @@ public void setup(){
 
   Fontset();
 
-  axisSet = new Axes(40, 240, 5, 144, 232, 500, 192, 10, 4, 2);
+  axisSet = new Axes(40, 240, 5, 144, 10, 4, 2, 250, 500, 200, 2);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
@@ -48,45 +48,54 @@ public void Fontset(){
 }
 //wave input visual axes
 class Axes{
+  //wave Input
   float startPtX; // 40
   float startPtY; // 240
   float overHang; //5
   float yHeight; //144
-  float wrappedWaveAxisCenterX; //232
-  float wrappedWaveAxisCenterY; //500
-  float halfGridLine; //192
   float numberOfUnitLengths;
   int ticksPerUnit;
   float endPtX;
   float tickSpacingX;
   float  tickSpacingY;
+
+  //wrapped output
+  int wrappedWaveAxisCenterX; //232
+  int wrappedWaveAxisCenterY; //500
+  int halfGridLine; //192
+  float linesPerSide;
   Axes(){
     startPtX = 40;
     startPtY = 240;
     overHang = 5;
     yHeight = 144;
-    wrappedWaveAxisCenterX = 232;
-    wrappedWaveAxisCenterY = 500;
-    halfGridLine = 192;
     numberOfUnitLengths = 5;
     ticksPerUnit = 4;
     endPtX = width - startPtX;
     tickSpacingX = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
     tickSpacingY = tickSpacingX * 1;
+
+
+    wrappedWaveAxisCenterX = 250;
+    wrappedWaveAxisCenterY = 500;
+    halfGridLine = 200;
+    linesPerSide = 2;
   }
-  Axes(float tempStartptX, float tempStartPtY, float tempOverHang, float tempYHeight, float tempWrappedWaveAxisCenterX, float tempWrappedWaveAxisCenterY, float tempHalfGridLine, float tempNumberOfUnitLengths, int tempTicksPerUnit, int tickConversionFactor){
+  Axes(float tempStartptX, float tempStartPtY, float tempOverHang, float tempYHeight, float tempNumberOfUnitLengths, int tempTicksPerUnit, int tickConversionFactor, int tempWrappedWaveAxisCenterX, int tempWrappedWaveAxisCenterY, int tempHalfGridLine, float tempLinesPerSide){
     startPtX = tempStartptX;
     startPtY = tempStartPtY;
     overHang =tempOverHang;
     yHeight = tempYHeight;
-    wrappedWaveAxisCenterX = tempWrappedWaveAxisCenterX;
-    wrappedWaveAxisCenterY = tempWrappedWaveAxisCenterY;
-    halfGridLine = tempHalfGridLine;
     numberOfUnitLengths = tempNumberOfUnitLengths;
     ticksPerUnit = tempTicksPerUnit;
     endPtX = width - startPtX;
     tickSpacingX = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
     tickSpacingY = tickSpacingX * tickConversionFactor;
+
+    wrappedWaveAxisCenterX = tempWrappedWaveAxisCenterX;
+    wrappedWaveAxisCenterY = tempWrappedWaveAxisCenterY;
+    halfGridLine = tempHalfGridLine;
+    linesPerSide = tempLinesPerSide;
   }
 
     //wave input visual axes  
@@ -122,19 +131,21 @@ class Axes{
     strokeWeight(2);
       line(wrappedWaveAxisCenterX-halfGridLine, wrappedWaveAxisCenterY, wrappedWaveAxisCenterX+halfGridLine, wrappedWaveAxisCenterY);
       line(wrappedWaveAxisCenterX, wrappedWaveAxisCenterY-halfGridLine, wrappedWaveAxisCenterX, wrappedWaveAxisCenterY+halfGridLine);
-      for(int i=94; i < 189; i = i + 94){
-        strokeWeight(1);
-        stroke(0, 160, 210);
+       for(float i = halfGridLine / linesPerSide; i <= halfGridLine; i = i + halfGridLine / linesPerSide){
+        strokeWeight(1); //sets weights
+        stroke(0, 160, 210); //sets color
         
         line(wrappedWaveAxisCenterX - i, wrappedWaveAxisCenterY-halfGridLine, wrappedWaveAxisCenterX - i, wrappedWaveAxisCenterY + halfGridLine);
         line(wrappedWaveAxisCenterX + i, wrappedWaveAxisCenterY-halfGridLine, wrappedWaveAxisCenterX + i, wrappedWaveAxisCenterY + halfGridLine);
         line(wrappedWaveAxisCenterX - halfGridLine, wrappedWaveAxisCenterY - i, wrappedWaveAxisCenterX + halfGridLine, wrappedWaveAxisCenterY - i);
         line(wrappedWaveAxisCenterX - halfGridLine, wrappedWaveAxisCenterY + i , wrappedWaveAxisCenterX + halfGridLine, wrappedWaveAxisCenterY + i);
     }
+
   }
-  /*public active float AxesStartPtY(){
+  /* public active float AxesStartPtY(){
     return startPtY;
-  }*/
+  }
+  */
 }
 class InputWave{
   float frequencyI;
