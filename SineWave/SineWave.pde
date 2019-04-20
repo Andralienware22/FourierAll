@@ -10,7 +10,7 @@ void setup(){
 
   Fontset();
 
-  axisSet = new Axes();
+  axisSet = new Axes(40, 240, 5, 144, 232, 500, 192, 5, 4);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1);

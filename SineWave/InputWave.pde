@@ -22,7 +22,7 @@ class InputWave{
 
   	for(float i = 0.0; i <= 4.5*other.ticksPerUnit*other.tickSpacing; i = i + .1){
       gOfX = (other.tickSpacing*cos(a) + (other.tickSpacing*sinusoidalAxis));
-  		point(i+40, other.startPtY - gOfX);a
+  		point(i+40, other.startPtY - gOfX);
       a = a + increment;
   	}
   }

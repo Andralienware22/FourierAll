@@ -26,7 +26,7 @@ public void setup(){
 
   Fontset();
 
-  axisSet = new Axes();
+  axisSet = new Axes(40, 240, 5, 144, 232, 500, 192, 5, 4);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1);
@@ -68,12 +68,12 @@ class Axes{
     wrappedWaveAxisCenterX = 232;
     wrappedWaveAxisCenterY = 500;
     halfGridLine = 192;
-    endPtX = width - startPtX;
     numberOfUnitLengths = 5;
     ticksPerUnit = 4;
+    endPtX = width - startPtX;
     tickSpacing = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
   }
-  Axes(float tempStartptX, float tempStartPtY, float tempOverHang, float tempYHeight, float tempWrappedWaveAxisCenterX, float tempWrappedWaveAxisCenterY, float tempHalfGridLine, int tempTicksPerUnit, float tempNumberOfUnitLengths){
+  Axes(float tempStartptX, float tempStartPtY, float tempOverHang, float tempYHeight, float tempWrappedWaveAxisCenterX, float tempWrappedWaveAxisCenterY, float tempHalfGridLine, float tempNumberOfUnitLengths, int tempTicksPerUnit ){
     startPtX = tempStartptX;
     startPtY = tempStartPtY;
     overHang =tempOverHang;
@@ -83,6 +83,7 @@ class Axes{
     halfGridLine = tempHalfGridLine;
     numberOfUnitLengths = tempNumberOfUnitLengths;
     ticksPerUnit = tempTicksPerUnit;
+    endPtX = width - startPtX;
     tickSpacing = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
   }
 
@@ -156,7 +157,7 @@ class InputWave{
     float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacing)/frequencyI/.1f);
 
   	for(float i = 0.0f; i <= 4.5f*other.ticksPerUnit*other.tickSpacing; i = i + .1f){
-      gOfX = (60*cos(a) + (60*sinusoidalAxis));
+      gOfX = (other.tickSpacing*cos(a) + (other.tickSpacing*sinusoidalAxis));
   		point(i+40, other.startPtY - gOfX);
       a = a + increment;
   	}
