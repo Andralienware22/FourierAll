@@ -29,7 +29,7 @@ public void setup(){
   axisSet = new Axes();
   axisSet.InputAxes();
   axisSet.WrappedAxes();
-  iW1 = new InputWave();
+  iW1 = new InputWave(2, 1);
 }
 
 int xspacing = 1; //spacing of each pt
@@ -134,19 +134,16 @@ class Axes{
   }*/
 }
 class InputWave{
-  float wavelengthI;
-  float periodsPerSecondW;
+  float frequencyI;
   float sinusoidalAxis;
   float gOfX;
   InputWave(){
-  	wavelengthI = 2;
-  	periodsPerSecondW = 2;
+  	frequencyI = 2;
   	sinusoidalAxis = 1;
   }
 
-  InputWave(float tempWavelengthI, float tempPeriodsPerSecondW, float tempSinusoidalAxis){
-  	wavelengthI = tempWavelengthI;
-  	periodsPerSecondW = tempPeriodsPerSecondW;
+  InputWave(float tempFrequencyI, float tempSinusoidalAxis){
+  	frequencyI = tempFrequencyI;
   	sinusoidalAxis = tempSinusoidalAxis;
   }
 
@@ -156,9 +153,9 @@ class InputWave{
     strokeWeight(1);
 
     float a = 0.0f;
-    float increment = TWO_PI / (other.ticksPerUnit*other.tickSpacing*wavelengthI/.1f);
+    float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacing)/frequencyI/.1f);
 
-  	for(float i = 0.0f; i <= 4.5f*4*60; i = i + .1f){
+  	for(float i = 0.0f; i <= 4.5f*other.ticksPerUnit*other.tickSpacing; i = i + .1f){
       gOfX = (60*cos(a) + (60*sinusoidalAxis));
   		point(i+40, other.startPtY - gOfX);
       a = a + increment;

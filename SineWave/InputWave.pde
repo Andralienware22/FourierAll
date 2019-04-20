@@ -1,17 +1,14 @@
 class InputWave{
-  float wavelengthI;
-  float periodsPerSecondW;
+  float frequencyI;
   float sinusoidalAxis;
   float gOfX;
   InputWave(){
-  	wavelengthI = 2;
-  	periodsPerSecondW = 2;
+  	frequencyI = 2;
   	sinusoidalAxis = 1;
   }
 
-  InputWave(float tempWavelengthI, float tempPeriodsPerSecondW, float tempSinusoidalAxis){
-  	wavelengthI = tempWavelengthI;
-  	periodsPerSecondW = tempPeriodsPerSecondW;
+  InputWave(float tempFrequencyI, float tempSinusoidalAxis){
+  	frequencyI = tempFrequencyI;
   	sinusoidalAxis = tempSinusoidalAxis;
   }
 
@@ -21,9 +18,9 @@ class InputWave{
     strokeWeight(1);
 
     float a = 0.0;
-    float increment = TWO_PI / (other.ticksPerUnit*other.tickSpacing*wavelengthI/.1);
+    float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacing)/frequencyI/.1);
 
-  	for(float i = 0.0; i <= 4.5*4*60; i = i + .1){
+  	for(float i = 0.0; i <= 4.5*other.ticksPerUnit*other.tickSpacing; i = i + .1){
       gOfX = (60*cos(a) + (60*sinusoidalAxis));
   		point(i+40, other.startPtY - gOfX);
       a = a + increment;

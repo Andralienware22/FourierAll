@@ -13,7 +13,7 @@ void setup(){
   axisSet = new Axes();
   axisSet.InputAxes();
   axisSet.WrappedAxes();
-  iW1 = new InputWave();
+  iW1 = new InputWave(2, 1);
 }
 
 int xspacing = 1; //spacing of each pt
