@@ -21,10 +21,10 @@ class InputWave{
     strokeWeight(1);
 
     float a = 0.0;
-    float increment = TWO_PI / (other.ticksPerUnit*(other.tickSpacing)/.01);
+    float increment = TWO_PI / (other.ticksPerUnit*other.tickSpacing*wavelengthI/.1);
 
-  	for(float i = 0.0; i <= 4.5*4*60; i = i + .01){
-      gOfX = (64*sin(a) + (64*sinusoidalAxis));
+  	for(float i = 0.0; i <= 4.5*4*60; i = i + .1){
+      gOfX = (60*cos(a) + (60*sinusoidalAxis));
   		point(i+40, other.startPtY - gOfX);
       a = a + increment;
   	}
