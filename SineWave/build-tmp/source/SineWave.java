@@ -26,10 +26,10 @@ public void setup(){
 
   Fontset();
 
-  axisSet = new Axes(40, 240, 5, 144, 232, 500, 192, 5, 4);
+  axisSet = new Axes(40, 240, 5, 144, 232, 500, 192, 10, 4, 2);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
-  iW1 = new InputWave(2, 1);
+  iW1 = new InputWave(2, 1, 10);
 }
 
 int xspacing = 1; //spacing of each pt
@@ -58,8 +58,8 @@ class Axes{
   float numberOfUnitLengths;
   int ticksPerUnit;
   float endPtX;
-  float tickSpacing;
-  
+  float tickSpacingX;
+  float  tickSpacingY;
   Axes(){
     startPtX = 40;
     startPtY = 240;
@@ -71,9 +71,10 @@ class Axes{
     numberOfUnitLengths = 5;
     ticksPerUnit = 4;
     endPtX = width - startPtX;
-    tickSpacing = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
+    tickSpacingX = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
+    tickSpacingY = tickSpacingX * 1;
   }
-  Axes(float tempStartptX, float tempStartPtY, float tempOverHang, float tempYHeight, float tempWrappedWaveAxisCenterX, float tempWrappedWaveAxisCenterY, float tempHalfGridLine, float tempNumberOfUnitLengths, int tempTicksPerUnit ){
+  Axes(float tempStartptX, float tempStartPtY, float tempOverHang, float tempYHeight, float tempWrappedWaveAxisCenterX, float tempWrappedWaveAxisCenterY, float tempHalfGridLine, float tempNumberOfUnitLengths, int tempTicksPerUnit, int tickConversionFactor){
     startPtX = tempStartptX;
     startPtY = tempStartPtY;
     overHang =tempOverHang;
@@ -84,7 +85,8 @@ class Axes{
     numberOfUnitLengths = tempNumberOfUnitLengths;
     ticksPerUnit = tempTicksPerUnit;
     endPtX = width - startPtX;
-    tickSpacing = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
+    tickSpacingX = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
+    tickSpacingY = tickSpacingX * tickConversionFactor;
   }
 
     //wave input visual axes  
@@ -95,13 +97,13 @@ class Axes{
     line(endPtX - overHang, startPtY - overHang, endPtX, startPtY);//end arrow
     line(endPtX - overHang, startPtY + overHang, endPtX, startPtY);//end arrow top
 
-    for(float i = tickSpacing; i < (endPtX-startPtX) ; i = i+tickSpacing){//tick marks
+    for(float i = tickSpacingX; i < (endPtX-startPtX) ; i = i+tickSpacingX){//tick marks
         line(startPtX+i, startPtY + overHang, startPtX + i, startPtY - overHang);
     }
 
-    for (int i = 0; tickSpacing * i < endPtX-startPtX; i++) {
+    for (int i = 0; tickSpacingX * i < endPtX-startPtX; i++) {
       if(i%ticksPerUnit == 0){
-        text(i/ticksPerUnit, startPtX + tickSpacing*i, startPtY+20);
+        text(i/ticksPerUnit, startPtX + tickSpacingX*i, startPtY+20);
       }
     }
 
@@ -109,7 +111,7 @@ class Axes{
     line(startPtX - overHang, startPtY-yHeight+ overHang, startPtX, startPtY-yHeight);
     line(startPtX + overHang, startPtY-yHeight + overHang, startPtX, startPtY-yHeight);
 
-    for(float i = tickSpacing; i < yHeight; i = i+tickSpacing){//tck marks
+    for(float i = tickSpacingY; i < yHeight; i = i+tickSpacingY){//tck marks
       line(startPtX - overHang, startPtY-i, startPtX + overHang, startPtY-i);
     }
   }
@@ -120,7 +122,7 @@ class Axes{
     strokeWeight(2);
       line(wrappedWaveAxisCenterX-halfGridLine, wrappedWaveAxisCenterY, wrappedWaveAxisCenterX+halfGridLine, wrappedWaveAxisCenterY);
       line(wrappedWaveAxisCenterX, wrappedWaveAxisCenterY-halfGridLine, wrappedWaveAxisCenterX, wrappedWaveAxisCenterY+halfGridLine);
-      for(int i=94; i < 200; i = i + 94){
+      for(int i=94; i < 189; i = i + 94){
         strokeWeight(1);
         stroke(0, 160, 210);
         
@@ -138,14 +140,17 @@ class InputWave{
   float frequencyI;
   float sinusoidalAxis;
   float gOfX;
+  float samplesPerPixel;
   InputWave(){
   	frequencyI = 2;
   	sinusoidalAxis = 1;
+    samplesPerPixel = 10;
   }
 
-  InputWave(float tempFrequencyI, float tempSinusoidalAxis){
+  InputWave(float tempFrequencyI, float tempSinusoidalAxis, float tempSamplesPerPixel){
   	frequencyI = tempFrequencyI;
   	sinusoidalAxis = tempSinusoidalAxis;
+    samplesPerPixel = tempSamplesPerPixel;
   }
 
   public void display(Axes other){
@@ -154,11 +159,11 @@ class InputWave{
     strokeWeight(1);
 
     float a = 0.0f;
-    float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacing)/frequencyI/.1f);
+    float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacingX)/frequencyI*samplesPerPixel);
 
-  	for(float i = 0.0f; i <= 4.5f*other.ticksPerUnit*other.tickSpacing; i = i + .1f){
-      gOfX = (other.tickSpacing*cos(a) + (other.tickSpacing*sinusoidalAxis));
-  		point(i+40, other.startPtY - gOfX);
+  	for(float i = 0.0f; i <= other.numberOfUnitLengths*other.ticksPerUnit*other.tickSpacingX; i = i + 1 / samplesPerPixel){
+      gOfX = (other.tickSpacingY*cos(a) + (other.tickSpacingY*sinusoidalAxis));
+  		point(i+other.startPtX, other.startPtY - gOfX);
       a = a + increment;
   	}
   }
