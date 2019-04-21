@@ -6,7 +6,7 @@ WrappedWave wW3;
 
 void setup(){
   size(1280, 720);
-  frameRate(.2);
+  frameRate(10);
   background(20);
   noiseSeed(4);
   noiseDetail(3,0.5);
@@ -16,7 +16,7 @@ void setup(){
   axisSet = new Axes(40, 240, 5, 144, 4, 1, 10, 250, 500, 200, 4);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
-  iW1 = new InputWave(2, 1, 10);
+  iW1 = new InputWave(2, 0, 10);
   wW1 = new WrappedWave(4, axisSet, iW1);
   wW2 = new WrappedWave(8, axisSet, iW1);
   wW3 = new WrappedWave(1, axisSet, iW1);
@@ -28,8 +28,8 @@ int w; //period of the wave
 void draw(){
   iW1.display(axisSet);
   wW1.graph();
-  wW2.graph();
-  wW3.graph();
+  //wW2.graph();
+  //wW3.graph();
 }
 
 //Times New Roman Setup

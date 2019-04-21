@@ -66,7 +66,6 @@ class WrappedWave{
     }
 
     void graph(){
-        stroke(255 * noise(colorRed), 255 * noise(colorBlue), 255 * noise(colorGreen));
     strokeWeight(1);
   
     float a = 0;
@@ -74,13 +73,20 @@ class WrappedWave{
     float graphIncrement = TWO_PI * frequency  / (ticksPerUnit * pixelsPerTick * samplesPerInputPixel);
     
     for(float i = 0; i <=  lengthOfInputs*ticksPerUnit*pixelsPerTick; i = i + graphIncrement){
-            float hOfX = cos(a) + sinusoidalAxisDisplacement;
-            float hOfXMap = map(hOfX, -1 + sinusoidalAxisDisplacement, 1 + sinusoidalAxisDisplacement, -1, 1);
-            float xOut = hOfXMap  * cos(i) * halfGridLine;
-            float yOut = hOfXMap * sin(i) * halfGridLine;
-            point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
-            a = a + aIncrement;
-        }
+      stroke(255 * noise(colorRed), 255 * noise(colorBlue), 255 * noise(colorGreen));
+      float hOfX = cos(a) + sinusoidalAxisDisplacement;
+      float hOfXMap = map(hOfX, -1 + sinusoidalAxisDisplacement, 1 + sinusoidalAxisDisplacement, -1, 0);
+      float xOut = hOfXMap  * cos(i) * halfGridLine;
+      float yOut = hOfXMap * sin(i) * halfGridLine;
+      point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
+      
+      stroke(255 * noise(pow(colorRed, 2.6)), 255 * noise(pow(colorBlue, 2.9)), 255 * noise(colorGreen));
+      hOfXMap = map(hOfX, -1 + sinusoidalAxisDisplacement, 1 + sinusoidalAxisDisplacement, -1, 1);
+      xOut = hOfXMap  * cos(i) * halfGridLine;
+      yOut = hOfXMap * sin(i) * halfGridLine;
+      point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
+      a = a + aIncrement;
+    }
 
     }
     
