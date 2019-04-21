@@ -16,8 +16,7 @@ public class SineWave extends PApplet {
 
 InputWave iW1;
 Axes axisSet;
-int sizeX = 1280;
-int sizeY = 720;
+WrappedWave wW1;
 
 public void setup(){
   
@@ -26,10 +25,11 @@ public void setup(){
 
   Fontset();
 
-  axisSet = new Axes(40, 240, 5, 144, 10, 4, 2, 250, 500, 200, 2);
+  axisSet = new Axes(40, 240, 5, 144, 4, 5, 1, 250, 500, 200, 3);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
+  wW1 = new WrappedWave();
 }
 
 int xspacing = 1; //spacing of each pt
@@ -173,11 +173,28 @@ class InputWave{
     float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacingX)/frequencyI*samplesPerPixel);
 
   	for(float i = 0.0f; i <= other.numberOfUnitLengths*other.ticksPerUnit*other.tickSpacingX; i = i + 1 / samplesPerPixel){
-      gOfX = (other.tickSpacingY*cos(a) + (other.tickSpacingY*sinusoidalAxis));
-  		point(i+other.startPtX, other.startPtY - gOfX);
+      gOfX = (other.tickSpacingY*cos(a));
+  		point(i+other.startPtX, other.startPtY - (gOfX + (other.tickSpacingY*sinusoidalAxis)));
       a = a + increment;
   	}
   }
+}
+class WrappedWave{
+	float frequency;
+	float hOfX;
+	float samplesPerInputPixel;
+	int sizeScale;
+	WrappedWave(){
+		frequency = 1;
+		samplesPerInputPixel = 10;
+		sizeScale = 200;
+	}
+	WrappedWave(float tempFrequency, Axes other, InputWave inputWave){
+		frequency = tempFrequency;
+		samplesPerInputPixel = inputWave.samplesPerPixel;
+		sizeScale = other.halfGridLine;
+	}
+
 }
   public void settings() {  size(1280, 720); }
   static public void main(String[] passedArgs) {

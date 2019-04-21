@@ -24,8 +24,8 @@ class InputWave{
     float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacingX)/frequencyI*samplesPerPixel);
 
   	for(float i = 0.0; i <= other.numberOfUnitLengths*other.ticksPerUnit*other.tickSpacingX; i = i + 1 / samplesPerPixel){
-      gOfX = (other.tickSpacingY*cos(a) + (other.tickSpacingY*sinusoidalAxis));
-  		point(i+other.startPtX, other.startPtY - gOfX);
+      gOfX = (other.tickSpacingY*cos(a));
+  		point(i+other.startPtX, other.startPtY - (gOfX + (other.tickSpacingY*sinusoidalAxis)));
       a = a + increment;
   	}
   }

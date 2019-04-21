@@ -1,7 +1,6 @@
 InputWave iW1;
 Axes axisSet;
-int sizeX = 1280;
-int sizeY = 720;
+WrappedWave wW1;
 
 void setup(){
   size(1280, 720);
@@ -10,10 +9,11 @@ void setup(){
 
   Fontset();
 
-  axisSet = new Axes(40, 240, 5, 144, 10, 4, 2, 250, 500, 200, 2);
+  axisSet = new Axes(40, 240, 5, 144, 4, 5, 1, 250, 500, 200, 3);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
+  wW1 = new WrappedWave();
 }
 
 int xspacing = 1; //spacing of each pt
