@@ -42,7 +42,7 @@ class Axes{
     ticksPerUnit = tempTicksPerUnit;
     endPtX = width - startPtX;
     tickSpacingX = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
-    tickSpacingY = tickSpacingX * tickConversionFactor;
+    tickSpacingY = tickSpacingX / tickConversionFactor;
 
     wrappedWaveAxisCenterX = tempWrappedWaveAxisCenterX;
     wrappedWaveAxisCenterY = tempWrappedWaveAxisCenterY;
