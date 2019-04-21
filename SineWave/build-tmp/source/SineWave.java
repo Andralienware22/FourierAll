@@ -17,19 +17,25 @@ public class SineWave extends PApplet {
 InputWave iW1;
 Axes axisSet;
 WrappedWave wW1;
+WrappedWave wW2;
+WrappedWave wW3;
 
 public void setup(){
   
-  frameRate(60);
+  frameRate(.2f);
   background(20);
+  noiseSeed(4);
+  noiseDetail(3,0.5f);
 
   Fontset();
 
-  axisSet = new Axes(40, 240, 5, 144, 4, 4, 1, 250, 500, 200, 4);
+  axisSet = new Axes(40, 240, 5, 144, 4, 1, 10, 250, 500, 200, 4);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
-  wW1 = new WrappedWave(.63f, axisSet, iW1);
+  wW1 = new WrappedWave(4, axisSet, iW1);
+  wW2 = new WrappedWave(8, axisSet, iW1);
+  wW3 = new WrappedWave(6, axisSet, iW1);
 }
 
 int xspacing = 1; //spacing of each pt
@@ -38,6 +44,8 @@ int w; //period of the wave
 public void draw(){
   iW1.display(axisSet);
   wW1.graph();
+  wW2.graph();
+  wW3.graph();
 }
 
 //Times New Roman Setup
@@ -91,7 +99,7 @@ class Axes{
     ticksPerUnit = tempTicksPerUnit;
     endPtX = width - startPtX;
     tickSpacingX = (endPtX - startPtX) / (numberOfUnitLengths * ticksPerUnit); 
-    tickSpacingY = tickSpacingX * tickConversionFactor;
+    tickSpacingY = tickSpacingX / tickConversionFactor;
 
     wrappedWaveAxisCenterX = tempWrappedWaveAxisCenterX;
     wrappedWaveAxisCenterY = tempWrappedWaveAxisCenterY;
@@ -153,92 +161,128 @@ class InputWave{
   float sinusoidalAxis;
   float gOfX;
   float samplesPerPixel;
+
+  float colorRed;
+  float colorBlue;
+  float colorGreen;
+
   InputWave(){
-  	frequencyI = 2;
-  	sinusoidalAxis = 1;
+    frequencyI = 2;
+    sinusoidalAxis = 1;
     samplesPerPixel = 10;
   }
 
   InputWave(float tempFrequencyI, float tempSinusoidalAxis, float tempSamplesPerPixel){
-  	frequencyI = tempFrequencyI;
-  	sinusoidalAxis = tempSinusoidalAxis;
+    frequencyI = tempFrequencyI;
+    sinusoidalAxis = tempSinusoidalAxis;
     samplesPerPixel = tempSamplesPerPixel;
+
+    colorRed = sinusoidalAxis;
+    colorBlue = frequencyI;
+    colorGreen = samplesPerPixel;
   }
 
   public float display(Axes other){
     //smooth(2);
-    stroke(255, 255, 0);
+    stroke(255 * noise(colorRed), 255 * noise(colorBlue), 255 * noise(colorGreen));
     strokeWeight(1);
 
     float a = 0.0f;
-    float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacingX)/frequencyI*samplesPerPixel);
+    float increment = TWO_PI * frequencyI / (other.ticksPerUnit*other.tickSpacingX * samplesPerPixel);
 
-  	for(float i = 0.0f; i <= other.numberOfUnitLengths*other.ticksPerUnit*other.tickSpacingX; i = i + 1 / samplesPerPixel){
-      gOfX = (cos(a));
-  		point(i+other.startPtX, other.startPtY - other.tickSpacingY*gOfX - (other.tickSpacingY*sinusoidalAxis));
+    for(float i = 0.0f; i <= other.numberOfUnitLengths*other.ticksPerUnit*other.tickSpacingX; i = i + 1 / samplesPerPixel){
+      gOfX = cos(a);
+      point(i+other.startPtX, other.startPtY - other.tickSpacingY*gOfX - (other.tickSpacingY*sinusoidalAxis));
       a = a + increment;
-  	}
+    }
     return increment;
   }
 }
 class WrappedWave{
-	float frequency;
-	float samplesPerInputPixel;
-	int sizeScale;
-	float a = 0;
+    float frequency;
+    float samplesPerInputPixel;
+    int sizeScale;
+  float sinusoidalAxisDisplacement;
+  
+    //wrapped output
+    int wrappedWaveAxisCenterX; //232
+    int wrappedWaveAxisCenterY; //500
+    int halfGridLine; //192
+    float linesPerSide;
+  
+  int ticksPerUnit;
+  float lengthOfInputs;
+  float pixelsPerTick;
 
-	//wrapped output
-	int wrappedWaveAxisCenterX; //232
-	int wrappedWaveAxisCenterY; //500
-	int halfGridLine; //192
-	float linesPerSide;
 
-	float inputIncrement;
-	float inputFrequency;
+    float inputIncrement;
+    float inputFrequency;
+  
+  float colorRed;
+  float colorBlue;
+  float colorGreen;
 
-	WrappedWave(){
-		frequency = 1;
-		samplesPerInputPixel = 10;
-		sizeScale = 200;
+    WrappedWave(){
+        frequency = 1;
+        samplesPerInputPixel = 1;
+        sizeScale = 200;
+    sinusoidalAxisDisplacement = 1;
 
-		wrappedWaveAxisCenterX = 250;
-	    wrappedWaveAxisCenterY = 500;
-	    halfGridLine = 200;
-	    linesPerSide = 2;
+        wrappedWaveAxisCenterX = 250;
+      wrappedWaveAxisCenterY = 500;
+      halfGridLine = 200;
+      linesPerSide = 2;
+      
+    ticksPerUnit = 5;
+    lengthOfInputs = 5;
+    pixelsPerTick =  60;
 
-	    inputIncrement = 0.0041887905f;
-	    inputFrequency = 2;
-	}
-	WrappedWave(float tempFrequency, Axes other, InputWave inputWave){
-		frequency = tempFrequency;
-		samplesPerInputPixel = inputWave.samplesPerPixel;
-		sizeScale = other.halfGridLine;
+      inputIncrement = 0.0041887905f;
+      inputFrequency = 2;
 
-		wrappedWaveAxisCenterX = other.wrappedWaveAxisCenterX;
-	    wrappedWaveAxisCenterY = other.wrappedWaveAxisCenterY;
-	    halfGridLine = other.halfGridLine;
-	    linesPerSide = other.linesPerSide;
+      
+    }
+    WrappedWave(float tempFrequency, Axes other, InputWave inputWave){
+        frequency = tempFrequency;
+        samplesPerInputPixel = inputWave.samplesPerPixel;
+        sizeScale = other.halfGridLine;
+        sinusoidalAxisDisplacement = inputWave.sinusoidalAxis;
+        
 
-	    inputIncrement = inputWave.display(other);
-	    inputFrequency = inputWave.frequencyI;
-	}
+        wrappedWaveAxisCenterX = other.wrappedWaveAxisCenterX;
+        wrappedWaveAxisCenterY = other.wrappedWaveAxisCenterY;
+        halfGridLine = other.halfGridLine;
+        linesPerSide = other.linesPerSide;
 
-	public void graph(){
-		stroke(220, 40, 40);
-    	strokeWeight(1);
+        ticksPerUnit = other.ticksPerUnit;
+        lengthOfInputs = other.numberOfUnitLengths;
+        pixelsPerTick =  other.tickSpacingX;
+        inputFrequency = inputWave.frequencyI;
 
-		float increment = TWO_PI /(samplesPerInputPixel/frequency/inputFrequency);
+        colorRed = frequency;
+        colorBlue = inputFrequency;
+        colorGreen = sinusoidalAxisDisplacement;
 
-		for(float i = 0; i <=  TWO_PI; i = i + 1 / (samplesPerInputPixel)){
-			float hOfX = (cos(a));
-			float xOut = hOfX * cos(i) * halfGridLine;
-			float yOut = hOfX * sin(i) * halfGridLine;
-			point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
-			a = a + increment;
-		}
-		println(inputIncrement); 
-	}
-	
+    }
+
+    public void graph(){
+        stroke(255 * noise(colorRed), 255 * noise(colorBlue), 255 * noise(colorGreen));
+    strokeWeight(1);
+  
+    float a = 0;
+        float aIncrement = TWO_PI * inputFrequency  / (samplesPerInputPixel * ticksPerUnit * pixelsPerTick);
+    float graphIncrement = TWO_PI * frequency  / (ticksPerUnit * pixelsPerTick * samplesPerInputPixel);
+    
+    for(float i = 0; i <=  lengthOfInputs*ticksPerUnit*pixelsPerTick; i = i + graphIncrement){
+            float hOfX = cos(a) - sinusoidalAxisDisplacement;
+            float xOut = hOfX * cos(i) * .5f * halfGridLine;
+            float yOut = hOfX * sin(i) * .5f * halfGridLine;
+            point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
+            a = a + aIncrement;
+        }
+
+    }
+    
 }
   public void settings() {  size(1280, 720); }
   static public void main(String[] passedArgs) {
