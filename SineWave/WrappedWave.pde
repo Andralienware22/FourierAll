@@ -74,9 +74,10 @@ class WrappedWave{
     float graphIncrement = TWO_PI * frequency  / (ticksPerUnit * pixelsPerTick * samplesPerInputPixel);
     
     for(float i = 0; i <=  lengthOfInputs*ticksPerUnit*pixelsPerTick; i = i + graphIncrement){
-            float hOfX = cos(a) - sinusoidalAxisDisplacement;
-            float xOut = hOfX * cos(i) * .5 * halfGridLine;
-            float yOut = hOfX * sin(i) * .5 * halfGridLine;
+            float hOfX = cos(a) + sinusoidalAxisDisplacement;
+            float hOfXMap = map(hOfX, -1 + sinusoidalAxisDisplacement, 1 + sinusoidalAxisDisplacement, -1, 1);
+            float xOut = hOfXMap  * cos(i) * halfGridLine;
+            float yOut = hOfXMap * sin(i) * halfGridLine;
             point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
             a = a + aIncrement;
         }

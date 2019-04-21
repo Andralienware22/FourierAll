@@ -19,7 +19,7 @@ void setup(){
   iW1 = new InputWave(2, 1, 10);
   wW1 = new WrappedWave(4, axisSet, iW1);
   wW2 = new WrappedWave(8, axisSet, iW1);
-  wW3 = new WrappedWave(6, axisSet, iW1);
+  wW3 = new WrappedWave(1, axisSet, iW1);
 }
 
 int xspacing = 1; //spacing of each pt
