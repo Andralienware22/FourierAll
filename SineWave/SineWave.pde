@@ -16,10 +16,10 @@ void setup(){
   axisSet = new Axes(40, 240, 5, 144, 4, 1, 10, 250, 500, 200, 4);
   axisSet.InputAxes();
   axisSet.WrappedAxes();
-  iW1 = new InputWave(2, 0, 10);
-  wW1 = new WrappedWave(4, axisSet, iW1);
-  wW2 = new WrappedWave(8, axisSet, iW1);
-  wW3 = new WrappedWave(1, axisSet, iW1);
+  iW1 = new InputWave(1, 1, 10);
+  wW1 = new WrappedWave(2, axisSet, iW1, 1);
+  wW2 = new WrappedWave(8, axisSet, iW1, 0);
+  wW3 = new WrappedWave(1, axisSet, iW1, 0);
 }
 
 int xspacing = 1; //spacing of each pt
