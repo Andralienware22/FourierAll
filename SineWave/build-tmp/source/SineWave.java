@@ -29,7 +29,7 @@ public void setup(){
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
-  wW1 = new WrappedWave();
+  wW1 = new WrappedWave(2, axisSet, iW1);
 }
 
 int xspacing = 1; //spacing of each pt
@@ -37,6 +37,7 @@ int w; //period of the wave
 
 public void draw(){
   iW1.display(axisSet);
+  wW1.graph();
 }
 
 //Times New Roman Setup
@@ -173,28 +174,60 @@ class InputWave{
     float increment = TWO_PI / ((other.ticksPerUnit*other.tickSpacingX)/frequencyI*samplesPerPixel);
 
   	for(float i = 0.0f; i <= other.numberOfUnitLengths*other.ticksPerUnit*other.tickSpacingX; i = i + 1 / samplesPerPixel){
-      gOfX = (other.tickSpacingY*cos(a));
-  		point(i+other.startPtX, other.startPtY - (gOfX + (other.tickSpacingY*sinusoidalAxis)));
+      gOfX = (cos(a));
+  		point(i+other.startPtX, other.startPtY - other.tickSpacingY*gOfX - (other.tickSpacingY*sinusoidalAxis));
       a = a + increment;
   	}
   }
 }
 class WrappedWave{
 	float frequency;
-	float hOfX;
 	float samplesPerInputPixel;
 	int sizeScale;
+	float a = 0;
+
+	//wrapped output
+	int wrappedWaveAxisCenterX; //232
+	int wrappedWaveAxisCenterY; //500
+	int halfGridLine; //192
+	float linesPerSide;
+
 	WrappedWave(){
 		frequency = 1;
 		samplesPerInputPixel = 10;
 		sizeScale = 200;
+
+		wrappedWaveAxisCenterX = 250;
+	    wrappedWaveAxisCenterY = 500;
+	    halfGridLine = 200;
+	    linesPerSide = 2;
 	}
 	WrappedWave(float tempFrequency, Axes other, InputWave inputWave){
 		frequency = tempFrequency;
 		samplesPerInputPixel = inputWave.samplesPerPixel;
 		sizeScale = other.halfGridLine;
+
+		wrappedWaveAxisCenterX = other.wrappedWaveAxisCenterX;
+	    wrappedWaveAxisCenterY = other.wrappedWaveAxisCenterY;
+	    halfGridLine = other.halfGridLine;
+	    linesPerSide = other.linesPerSide;
 	}
 
+	public void graph(){
+		stroke(220, 40, 40);
+    	strokeWeight(1);
+
+		float increment = TWO_PI /(samplesPerInputPixel/frequency);
+
+		for(float i = 0; i <=  TWO_PI; i = i + 1 / (samplesPerInputPixel)){
+			float hOfX = (cos(a));
+			float xOut = hOfX * cos(i) * halfGridLine;
+			float yOut = hOfX * sin(i) * halfGridLine;
+			point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
+			a = a + increment;
+		} 
+	}
+	
 }
   public void settings() {  size(1280, 720); }
   static public void main(String[] passedArgs) {

@@ -13,7 +13,7 @@ void setup(){
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
-  wW1 = new WrappedWave();
+  wW1 = new WrappedWave(2, axisSet, iW1);
 }
 
 int xspacing = 1; //spacing of each pt
@@ -21,6 +21,7 @@ int w; //period of the wave
 
 void draw(){
   iW1.display(axisSet);
+  wW1.graph();
 }
 
 //Times New Roman Setup
