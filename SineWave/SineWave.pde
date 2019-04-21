@@ -4,7 +4,7 @@ WrappedWave wW1;
 
 void setup(){
   size(1280, 720);
-  frameRate(60);
+  frameRate(30);
   background(20);
 
   Fontset();
@@ -13,7 +13,7 @@ void setup(){
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
-  wW1 = new WrappedWave(.63, axisSet, iW1);
+  wW1 = new WrappedWave(2, axisSet, iW1);
 }
 
 int xspacing = 1; //spacing of each pt
