@@ -10,6 +10,9 @@ class WrappedWave{
 	int halfGridLine; //192
 	float linesPerSide;
 
+	float inputIncrement;
+	float inputFrequency;
+
 	WrappedWave(){
 		frequency = 1;
 		samplesPerInputPixel = 10;
@@ -19,6 +22,9 @@ class WrappedWave{
 	    wrappedWaveAxisCenterY = 500;
 	    halfGridLine = 200;
 	    linesPerSide = 2;
+
+	    inputIncrement = 0.0041887905;
+	    inputFrequency = 2;
 	}
 	WrappedWave(float tempFrequency, Axes other, InputWave inputWave){
 		frequency = tempFrequency;
@@ -29,13 +35,16 @@ class WrappedWave{
 	    wrappedWaveAxisCenterY = other.wrappedWaveAxisCenterY;
 	    halfGridLine = other.halfGridLine;
 	    linesPerSide = other.linesPerSide;
+
+	    inputIncrement = inputWave.display(other);
+	    inputFrequency = inputWave.frequencyI;
 	}
 
 	void graph(){
 		stroke(220, 40, 40);
     	strokeWeight(1);
 
-		float increment = TWO_PI /(samplesPerInputPixel/frequency);
+		float increment = TWO_PI /(samplesPerInputPixel/frequency/inputFrequency);
 
 		for(float i = 0; i <=  TWO_PI; i = i + 1 / (samplesPerInputPixel)){
 			float hOfX = (cos(a));
@@ -43,7 +52,8 @@ class WrappedWave{
 			float yOut = hOfX * sin(i) * halfGridLine;
 			point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
 			a = a + increment;
-		} 
+		}
+		println(inputIncrement); 
 	}
 	
 }

@@ -15,7 +15,7 @@ class InputWave{
     samplesPerPixel = tempSamplesPerPixel;
   }
 
-  void display(Axes other){
+  float display(Axes other){
     //smooth(2);
     stroke(255, 255, 0);
     strokeWeight(1);
@@ -28,5 +28,6 @@ class InputWave{
   		point(i+other.startPtX, other.startPtY - other.tickSpacingY*gOfX - (other.tickSpacingY*sinusoidalAxis));
       a = a + increment;
   	}
+    return increment;
   }
 }

@@ -29,7 +29,7 @@ public void setup(){
   axisSet.InputAxes();
   axisSet.WrappedAxes();
   iW1 = new InputWave(2, 1, 10);
-  wW1 = new WrappedWave(2, axisSet, iW1);
+  wW1 = new WrappedWave(.63f, axisSet, iW1);
 }
 
 int xspacing = 1; //spacing of each pt
@@ -165,7 +165,7 @@ class InputWave{
     samplesPerPixel = tempSamplesPerPixel;
   }
 
-  public void display(Axes other){
+  public float display(Axes other){
     //smooth(2);
     stroke(255, 255, 0);
     strokeWeight(1);
@@ -178,6 +178,7 @@ class InputWave{
   		point(i+other.startPtX, other.startPtY - other.tickSpacingY*gOfX - (other.tickSpacingY*sinusoidalAxis));
       a = a + increment;
   	}
+    return increment;
   }
 }
 class WrappedWave{
@@ -192,6 +193,9 @@ class WrappedWave{
 	int halfGridLine; //192
 	float linesPerSide;
 
+	float inputIncrement;
+	float inputFrequency;
+
 	WrappedWave(){
 		frequency = 1;
 		samplesPerInputPixel = 10;
@@ -201,6 +205,9 @@ class WrappedWave{
 	    wrappedWaveAxisCenterY = 500;
 	    halfGridLine = 200;
 	    linesPerSide = 2;
+
+	    inputIncrement = 0.0041887905f;
+	    inputFrequency = 2;
 	}
 	WrappedWave(float tempFrequency, Axes other, InputWave inputWave){
 		frequency = tempFrequency;
@@ -211,13 +218,16 @@ class WrappedWave{
 	    wrappedWaveAxisCenterY = other.wrappedWaveAxisCenterY;
 	    halfGridLine = other.halfGridLine;
 	    linesPerSide = other.linesPerSide;
+
+	    inputIncrement = inputWave.display(other);
+	    inputFrequency = inputWave.frequencyI;
 	}
 
 	public void graph(){
 		stroke(220, 40, 40);
     	strokeWeight(1);
 
-		float increment = TWO_PI /(samplesPerInputPixel/frequency);
+		float increment = TWO_PI /(samplesPerInputPixel/frequency/inputFrequency);
 
 		for(float i = 0; i <=  TWO_PI; i = i + 1 / (samplesPerInputPixel)){
 			float hOfX = (cos(a));
@@ -225,7 +235,8 @@ class WrappedWave{
 			float yOut = hOfX * sin(i) * halfGridLine;
 			point(wrappedWaveAxisCenterX-xOut, wrappedWaveAxisCenterY-yOut);
 			a = a + increment;
-		} 
+		}
+		println(inputIncrement); 
 	}
 	
 }
